@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useState, FormEvent, useEffect } from 'react';
+import { useState, type FormEvent, useEffect } from 'react';
 import Orb from '../../components/base/Orb';
 import MobileMenu from '../../components/feature/MobileMenu';
 
@@ -59,16 +59,12 @@ export default function Contact() {
       <div className="relative z-10 min-h-screen">
         {/* Header */}
         <header className={`w-full py-5 px-8 pointer-events-auto transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'} relative z-50`}>
-          <div className="container mx-auto flex justify-center lg:justify-center items-center relative">
+          <div className="container mx-auto flex justify-between items-center">
+            <div className="flex items-center">
+              {/* Empty space for layout balance */}
+            </div>
             {/* Desktop Navigation */}
             <div className="hidden lg:flex items-center gap-4">
-              <button
-                onClick={() => navigate('/')}
-                className="px-6 py-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-sm rounded-full whitespace-nowrap hover:bg-white/20 transition-all cursor-pointer font-medium flex items-center gap-2"
-              >
-                <i className="ri-home-line text-lg"></i>
-                {t('nav_home')}
-              </button>
               <a
                 href="https://helpdesk.brainsoftict.nl/"
                 target="_blank"
@@ -81,13 +77,11 @@ export default function Contact() {
                 onClick={() => navigate('/')}
                 className="px-6 py-2 bg-white text-gray-900 text-sm rounded-full whitespace-nowrap hover:bg-gray-100 transition-all cursor-pointer font-medium"
               >
-                {t('get_early_access')}
+                {t('nav_home')}
               </button>
             </div>
-            {/* Mobile Menu - positioned absolutely to the right to not affect centering */}
-            <div className="lg:hidden absolute right-0 top-1/2 -translate-y-1/2">
-              <MobileMenu currentPage="contact" />
-            </div>
+            {/* Mobile Menu */}
+            <MobileMenu currentPage="contact" />
           </div>
         </header>
 

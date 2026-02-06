@@ -1,0 +1,19 @@
+CHANGES AND IMPROVEMENTS - 2026-02-06
+
+1. Git Repository Initialization:
+   - Initialized a new git repository for the project.
+   - Added a `.gitignore` file to exclude node_modules, build artifacts, and environment files.
+   - Connected to remote repository: https://github.com/bsi-nvr/bsisitedemo
+
+2. Contact Page Navigation Refactor:
+   - Removed the redundant "Home" button from the left side of the desktop navigation.
+   - Updated the header layout to match the Home page structure (using `justify-between` and balanced spacing).
+   - This ensures a consistent visual experience when navigating between Home and Contact pages.
+
+3. Contact Page Actions:
+   - Changed the "Get Early Access" button text to "Home" (or localized "Home" equivalent).
+   - Configured this button to navigate back to the Home page ('/').
+   - This provides a clear path for users to return to the main landing page.
+
+4. Code Maintenance:
+   - Fixed a TypeScript lint error regarding `FormEvent` import in `src/pages/contact/page.tsx` by using `type` modifier.
