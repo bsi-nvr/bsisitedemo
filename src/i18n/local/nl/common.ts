@@ -1,7 +1,7 @@
 export default {
   nav_home: 'Home',
   nav_contact: 'Contact',
-  nav_home: 'Home',
+
   nav_about: 'Over Ons',
   get_early_access: 'Neem contact op',
   hero_title: 'Brainsoft ICT is hard aan het werk om u een vernieuwde online ervaring te bieden.',
