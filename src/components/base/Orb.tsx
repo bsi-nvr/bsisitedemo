@@ -7,9 +7,10 @@ interface OrbProps {
   hoverIntensity?: number;
   rotateOnHover?: boolean;
   forceHoverState?: boolean;
+  scale?: number;
 }
 
-export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = true, forceHoverState = false }: OrbProps) {
+export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = true, forceHoverState = false, scale = 1 }: OrbProps) {
   const ctnDom = useRef<HTMLDivElement>(null);
 
   const vert = /* glsl */ `
@@ -32,6 +33,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
     uniform float hover;
     uniform float rot;
     uniform float hoverIntensity;
+    uniform float scale;
     uniform vec2 mousePos;
     uniform float mouseInfluence;
     varying vec2 vUv;
@@ -176,6 +178,9 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       vec2 center = iResolution.xy * 0.5;
       float size = min(iResolution.x, iResolution.y);
       vec2 uv = (fragCoord - center) / size * 2.0;
+
+      // Apply scale
+      uv /= scale;
       
       float angle = rot;
       float s = sin(angle);
@@ -218,6 +223,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
         hover: { value: 0 },
         rot: { value: 0 },
         hoverIntensity: { value: hoverIntensity },
+        scale: { value: scale },
         mousePos: { value: [0, 0] },
         mouseInfluence: { value: 0 }
       }
@@ -258,7 +264,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       const uvY = -((y - centerY) / size) * 2.0;
 
       // Update mouse position in shader coordinates
-      program.uniforms.mousePos.value = [uvX, uvY];
+      program.uniforms.mousePos.value = [uvX / scale, uvY / scale]; // Adjust mouse pos for scale
 
       const distFromCenter = Math.sqrt(uvX * uvX + uvY * uvY);
 
@@ -297,6 +303,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       program.uniforms.iTime.value = t * 0.001;
       program.uniforms.hue.value = hue;
       program.uniforms.hoverIntensity.value = hoverIntensity;
+      program.uniforms.scale.value = scale;
 
       const effectiveHover = forceHoverState ? 1 : targetHover;
       program.uniforms.hover.value += (effectiveHover - program.uniforms.hover.value) * 0.05;
@@ -320,7 +327,7 @@ export default function Orb({ hue = 0, hoverIntensity = 0.2, rotateOnHover = tru
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hue, hoverIntensity, rotateOnHover, forceHoverState]);
+  }, [hue, hoverIntensity, rotateOnHover, forceHoverState, scale]);
 
   return <div ref={ctnDom} className="orb-container" />;
 }

@@ -52,7 +52,7 @@ export default function Contact() {
     <div id="contactForm" className="min-h-screen font-sans relative overflow-hidden lg:pb-20" style={{ backgroundImage: 'linear-gradient(to bottom right, #172029, #2f3f4f)', backgroundAttachment: 'fixed' }}>
       {/* Animated Orb Background - Desktop only */}
       <div className="hidden lg:block fixed inset-0 z-0 pointer-events-none">
-        <Orb hue={270} hoverIntensity={0.1} rotateOnHover={true} />
+        <Orb hue={270} hoverIntensity={0.1} rotateOnHover={true} scale={1} />
       </div>
 
       {/* Content */}
@@ -88,7 +88,7 @@ export default function Contact() {
         {/* Main Content */}
         <main className="container mx-auto px-8 py-8 max-w-6xl flex-grow flex flex-col justify-center min-h-[calc(100vh-100px)]">
           {/* Desktop Layout */}
-          <div className="hidden lg:flex flex-col items-center justify-center max-w-4xl mx-auto w-full space-y-6">
+          <div className="hidden lg:flex flex-col items-center justify-center max-w-2xl mx-auto w-full space-y-6">
             {/* Logo in Center */}
             <div className={`transition-all duration-1000 delay-200 ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}>
               <img
