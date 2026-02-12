@@ -195,7 +195,7 @@ export default function Contact() {
               <div className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <h2 className="text-2xl font-bold text-white mb-6">Stuur ons een bericht</h2>
 
-                <form id="contact-form" data-readdy-form onSubmit={handleSubmit} className="space-y-4">
+                <form id="contact-form" onSubmit={handleSubmit} className="space-y-4">
                   <div className="transition-all duration-300 hover:scale-[1.01]">
                     <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
                       {t('form_name')} *
@@ -376,7 +376,7 @@ export default function Contact() {
               <div className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 transition-all duration-1000 delay-400 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <h2 className="text-xl font-bold text-white mb-4">Stuur ons een bericht</h2>
 
-                <form id="contact-form-mobile" data-readdy-form onSubmit={handleSubmit} className="space-y-4">
+                <form id="contact-form-mobile" onSubmit={handleSubmit} className="space-y-4">
                   <div className="transition-all duration-300 hover:scale-[1.01]">
                     <label htmlFor="name-mobile" className="block text-sm font-medium text-white mb-2">
                       {t('form_name')} *
