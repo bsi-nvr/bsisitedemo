@@ -23,16 +23,29 @@ export default function Contact() {
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Add recipient email
-    formData.append('_to', 'info@brainsoftict.nl');
+    // Formspark configuration
+    // Add a subject line for the email
+    formData.append('_email.subject', 'Nieuw bericht van Brainsoft ICT Website');
+    // Disable spam protection (honeypot) if needed, or use default. 
+    // We can allow Formspark to handle the rest.
+
+    const formId = import.meta.env.VITE_FORMSPARK_FORM_ID;
+
+    if (!formId) {
+      console.error('Formspark ID is missing in environment variables');
+      setFormStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      const response = await fetch('https://readdy.ai/api/form/d5mh0h144v703eh914mg', {
+      const response = await fetch(`https://submit-form.com/${formId}`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
-        body: new URLSearchParams(formData as any).toString(),
+        body: JSON.stringify(Object.fromEntries(formData)),
       });
 
       if (response.ok) {
@@ -42,6 +55,7 @@ export default function Contact() {
         setFormStatus('error');
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       setFormStatus('error');
     } finally {
       setIsSubmitting(false);
