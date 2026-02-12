@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useState, type FormEvent, useEffect } from 'react';
+import { useFormspark } from '@formspark/use-formspark';
 import Orb from '../../components/base/Orb';
 import MobileMenu from '../../components/feature/MobileMenu';
 
@@ -8,8 +9,12 @@ export default function Contact() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [formStatus, setFormStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const FORMSPARK_FORM_ID = import.meta.env.VITE_FORMSPARK_FORM_ID;
+
+  const [submit, submitting] = useFormspark({
+    formId: FORMSPARK_FORM_ID || '',
+  });
 
   useEffect(() => {
     setIsVisible(true);
@@ -17,48 +22,30 @@ export default function Contact() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setFormStatus('idle');
+
+    if (!FORMSPARK_FORM_ID) {
+      console.error('Formspark ID is missing');
+      setFormStatus('error');
+      return;
+    }
 
     const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Formspark configuration
-    // Add a subject line for the email
-    formData.append('_email.subject', 'Nieuw bericht van Brainsoft ICT Website');
-    // Disable spam protection (honeypot) if needed, or use default. 
-    // We can allow Formspark to handle the rest.
+    // Convert FormData to plain object for useFormspark
+    const data = Object.fromEntries(formData);
 
-    const formId = import.meta.env.VITE_FORMSPARK_FORM_ID;
-
-    if (!formId) {
-      console.error('Formspark ID is missing in environment variables');
-      setFormStatus('error');
-      setIsSubmitting(false);
-      return;
-    }
+    // Add subject line
+    data['_email.subject'] = 'Nieuw bericht van Brainsoft ICT Website';
 
     try {
-      const response = await fetch(`https://submit-form.com/${formId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(Object.fromEntries(formData)),
-      });
-
-      if (response.ok) {
-        setFormStatus('success');
-        form.reset();
-      } else {
-        setFormStatus('error');
-      }
+      await submit(data);
+      setFormStatus('success');
+      form.reset();
     } catch (error) {
       console.error('Form submission error:', error);
       setFormStatus('error');
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -267,10 +254,10 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={submitting}
                     className="w-full px-6 py-4 bg-white text-gray-900 text-base font-semibold rounded-lg whitespace-nowrap hover:bg-gray-100 hover:scale-[1.02] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? 'Verzenden...' : t('form_submit')}
+                    {submitting ? 'Verzenden...' : t('form_submit')}
                   </button>
                 </form>
               </div>
@@ -448,10 +435,10 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={submitting}
                     className="w-full px-6 py-4 bg-white text-gray-900 text-base font-semibold rounded-lg whitespace-nowrap hover:bg-gray-100 hover:scale-[1.02] transition-all duration-300 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    {isSubmitting ? 'Verzenden...' : t('form_submit')}
+                    {submitting ? 'Verzenden...' : t('form_submit')}
                   </button>
                 </form>
               </div>
